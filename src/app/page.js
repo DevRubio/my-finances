@@ -1,8 +1,9 @@
-import { IconUser } from "@/assets/Icons"
+import { AddAccount } from "@/components/AddAccount"
 export default function Home() {
   return (
-    <main className="m-4">
+    <main className="">
       <h1>Home Page</h1>
+      <AddAccount/>
     </main>
   )
 }
