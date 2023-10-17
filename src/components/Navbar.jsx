@@ -26,7 +26,7 @@ export function Navbar(){
     const noActive = 'text-gray-500'
     const pathname = usePathname()
     return(        
-        <header className="border rounden-md p-4">
+        <header className="border rounden-md p-4 bg-slate-100">
             <nav className="flex justify-between">
                 <ul className="flex list-none gap-8">
                     {links.map(({label, route})=>(
