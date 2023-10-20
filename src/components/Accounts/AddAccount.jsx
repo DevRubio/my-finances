@@ -15,7 +15,7 @@ export function AddAccount(){
     <div>
       <div
         onClick={() => props.setOpenModal("form-elements")}
-        className="flex justify-around items-center border-2 border-dashed hover:border-blue-600 cursor-pointer rounded-lg h-16 w-44"
+        className="flex justify-around w-full items-center border-2 border-dashed hover:border-blue-600 cursor-pointer rounded-lg h-16"
       >
         <div>+</div>
         <div> Añadir Cuenta</div>
