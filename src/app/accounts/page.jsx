@@ -2,6 +2,7 @@ import { Button, Card, Icon, Title } from "@tremor/react"
 import { firebaseApp } from "@/app/firebase";
 import { collection, getDocs, getFirestore } from "firebase/firestore"
 import { GetIcons } from "@/components/GetIcons";
+import Link from "next/link";
 
 async function getAccounts(){
   const db = getFirestore(firebaseApp);
@@ -28,6 +29,7 @@ export default async function Accounts(){
             {
             Accounts.map((item) =>(
                     <Card key={item.id} className="mb-3 cursor-pointer" decoration="top" decorationColor={item.color} color={item.color}>
+                        <Link href={`/accounts/detail/${item.id}`}>
                         <div className="flex items-center justify-between">
                         <GetIcons 
                                 icon={item.icon}
@@ -38,7 +40,9 @@ export default async function Accounts(){
                         <span>{item.name}</span>
                         <span>{item.type}</span>
                         <span>{item.amount}</span>
-                        </div>
+                        </div>                        
+                        </Link>
+
                     </Card>
                 ))}
             </div>
