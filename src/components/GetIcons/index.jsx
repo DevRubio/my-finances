@@ -19,6 +19,6 @@ export function GetIcons(props){
     ReturIcon()
 
     return(
-        <Icon icon={IconCard} variant={props.variant} size={props.size} color={props.color}><CashIcon/></Icon>
+        <Icon icon={IconCard} variant={props.variant} size={props.size} color={`${props.color}`}/>
     )
 }
