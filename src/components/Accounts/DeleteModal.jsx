@@ -3,12 +3,13 @@ import { Button, Modal } from "flowbite-react"
 import { useState } from "react"
 import { FireIcon, XCircleIcon } from "@heroicons/react/outline"
 import Link from "next/link"
+import { deleteAcount } from "@/app/accounts/actionsServer"
 
 
-export function DeleteModal(){
+export function DeleteModal(props){
     const [openModal, setOpenModal] = useState('')
     const action = {openModal, setOpenModal}
-
+    const id = props.id
     return(
         <div>
             <Button onClick={()=>action.setOpenModal('pop-up')} gradientDuoTone="pinkToOrange" outline color="red">
@@ -26,7 +27,7 @@ export function DeleteModal(){
             </h3>
             <div className="flex justify-center gap-4">
             <Link href={"/accounts"}>
-              <Button color="failure">
+              <Button color="failure" onClick={()=>deleteAcount(id)}>
                 Si, Estoy Seguro
               </Button>
               </Link>

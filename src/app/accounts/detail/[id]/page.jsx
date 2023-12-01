@@ -6,8 +6,8 @@ import Link from "next/link"
 import { DeleteModal } from "@/components/Accounts/DeleteModal"
 
 
-export default  function Detail({params}){
-
+export default function Detail({params}){
+    const {id} = params
     return(
         <Flex flexDirection="col">
             <Card className="m-3 w-full">
@@ -20,7 +20,7 @@ export default  function Detail({params}){
                     </Flex>
                     <Flex justifyContent="end" className="gap-3">                        
                     <Button gradientDuoTone="greenToBlue" outline> <PencilIcon className="mr-2 h-5 w-5"/> Editar </Button>
-                        <DeleteModal/>
+                        <DeleteModal id={id}/>
                     </Flex>
                 </div> 
                 <Divider/>
