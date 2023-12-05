@@ -1,23 +1,13 @@
 import { Button, Card, Icon, Title } from "@tremor/react"
-import { firebaseApp } from "@/app/firebase";
-import { collection, getDocs, getFirestore } from "firebase/firestore"
 import { GetIcons } from "@/components/GetIcons";
+import { getData } from "./actionsServer";
 import Link from "next/link";
 
-async function getAccounts(){
-  const db = getFirestore(firebaseApp);
-        const querySnapshot = await getDocs(collection(db, 'accounts'))
-        const accounts = [] 
-        querySnapshot.forEach((doc) => {            
-          accounts.push({ ...doc.data(), id: doc.id })
-        })     
-        return accounts
-}
 
 export default async function Accounts(){
 
-  const Accounts = await getAccounts()
-
+  const Accounts = await getData()
+  
     return(
         <div className="flex">
             <div className="w-[20%] bg-white m-5 p-3 rounded-md">                

@@ -1,6 +1,8 @@
 'use client'
 import { PencilIcon } from "@heroicons/react/outline"
 import { GetIcons } from "../GetIcons";
+
+
 export function CardAccounts(props){
 
     const valueFormatter = (number) => `$ ${new Intl.NumberFormat('ES', { style: 'currency', currency: 'COP' }).format(number)}`;

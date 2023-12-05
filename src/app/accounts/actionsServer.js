@@ -1,8 +1,36 @@
 'use server'
 import { firebaseApp } from "@/app/firebase";
-import { addDoc, collection, deleteDoc, doc, getFirestore } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, onSnapshot, query } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp)
+
+/* export async function getData(){
+  const querySnapshot = await  getDocs(collection(db,'accounts'));
+  const acounts = []
+  querySnapshot.forEach((doc) => {
+      acounts.push({...doc.data(), id: doc.id})
+  })
+
+  return acounts
+} */
+
+export async function getData(){
+
+  return new Promise((resolve, reject)=>{
+    const q = query(collection(db, 'accounts'))
+    const unsubcribe = onSnapshot(q, (querySnapshot)=>{
+      const accounts = []
+      querySnapshot.forEach((doc)=>{
+        accounts.push({...doc.data(), id: doc.id})
+      })
+      unsubcribe()
+      resolve(accounts)
+    },(error)=>{
+      reject(error)
+    })
+  })
+
+}
 
 export async function deleteAcount(id){   
     await deleteDoc(doc(db, 'accounts', id))
