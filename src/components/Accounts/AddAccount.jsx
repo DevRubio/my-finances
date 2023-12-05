@@ -80,16 +80,16 @@ export function AddAccount(){
                 <Text>Tipo de Cuenta</Text>
               </div>
               <Select icon={CashIcon} value={typeAccount} onValueChange={setTypeAccount}>              
-                <SelectItem value="Efectivo" icon={CashIcon}>              
+                <SelectItem value="cash" icon={CashIcon}>              
                  Efectivo
                 </SelectItem>
-                <SelectItem value="Tarjeta de Credito" icon={CreditCardIcon}>
+                <SelectItem value="creditCard" icon={CreditCardIcon}>
                 Tarjeta de Credito
                 </SelectItem>
-                <SelectItem value="Inversion" icon={CurrencyDollarIcon}>
+                <SelectItem value="investment" icon={CurrencyDollarIcon}>
                 Inversion
                 </SelectItem>
-                <SelectItem value="Cuenta Bancaria" icon={OfficeBuildingIcon}>
+                <SelectItem value="BankAccount" icon={OfficeBuildingIcon}>
                 Cuenta Bancaria
                 </SelectItem>
             </Select>
