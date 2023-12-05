@@ -35,6 +35,7 @@ export async function getData(){
 
 export async function deleteAcount(id){   
     await deleteDoc(doc(db, 'accounts', id))
+    redirect('/accounts')
 }
 
 export const saveData = async(value)=>{  
