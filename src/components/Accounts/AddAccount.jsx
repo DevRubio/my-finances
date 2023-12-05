@@ -32,6 +32,7 @@ export function AddAccount(){
   const saveAccount = (e)=>{
     e.preventDefault()
     saveData(data)
+    props.setOpenModal(undefined)
   }
   
 

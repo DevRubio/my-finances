@@ -1,6 +1,7 @@
 'use server'
 import { firebaseApp } from "@/app/firebase";
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, onSnapshot, query } from "firebase/firestore";
+import { redirect } from "next/navigation";
 
 const db = getFirestore(firebaseApp)
 
@@ -44,4 +45,5 @@ export const saveData = async(value)=>{
     }catch(error){
       console.error("ERROR AL GUARDAR DATOS ",error)
     }
+    redirect('/')
   }
