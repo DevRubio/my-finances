@@ -1,11 +1,12 @@
 import { Grid } from "@tremor/react"
 import { CardAccounts } from "./CardAccounts"
 import { AddAccount } from "./AddAccount"
-import { getData } from "@/app/accounts/actionsServer"
+import { getData, getColors } from "@/app/accounts/actionsServer"
 
 export async function Accounts(){ 
 
     const Accounts = await getData()
+    const Colors = await getColors()
     
     return(
         <div className="bg-slate-100 p-2">   
@@ -19,7 +20,9 @@ export async function Accounts(){
                         balance={item.amount}
                     />
                 ))}
-                <AddAccount/>
+                <AddAccount
+                Colors={Colors}
+                />
             </Grid>
         </div>
     )

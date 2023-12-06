@@ -33,6 +33,15 @@ export async function getData(){
 
 }
 
+export async function getColors(){
+  const querySnapshot = await getDocs(collection(db,'app_config/ewwoHea9UOUwnscABJzq/colors'))
+  const colors = []
+  querySnapshot.forEach((doc)=>{
+    colors.push({...doc.data(), id: doc.id})
+  })
+  return colors
+}
+
 export async function deleteAcount(id){   
     await deleteDoc(doc(db, 'accounts', id))
     redirect('/accounts')

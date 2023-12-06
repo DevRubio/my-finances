@@ -7,7 +7,8 @@ import { CreditCardIcon, CashIcon, CurrencyDollarIcon, OfficeBuildingIcon } from
 import { saveData } from "@/app/accounts/actionsServer";
 
 
-export function AddAccount(){
+export function AddAccount({Colors}){
+    
   const ValueInitial = {
     name: "",
     amount: "",
@@ -70,8 +71,9 @@ export function AddAccount(){
             <div className="">               
                 <Text >Color</Text>
                 <Select name="Color" value={valueColor} onValueChange={setValueColor}>
-                  <SelectItem name="red" value="red" color="red" className="bg-red">Red</SelectItem>
-                  <SelectItem name="blue" value="fuchsia" color="fuchsia" className="bg-fuchsia">Fuchsia</SelectItem>
+                  {Colors?.map((color)=>(                    
+                    <SelectItem key={color.id} name={color.name} value={color.name}>{color.name}</SelectItem>
+                  ))}    
                 </Select>
             </div>
             </Flex>
