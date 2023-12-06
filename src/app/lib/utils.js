@@ -9,6 +9,6 @@ export function FormatMoney(value){
 }
 
 export function FormatDate(date){
-    const newdateFormat = (date)?.toDate().toDateString() 
+    const newdateFormat = (date)?.toDate().toLocaleDateString('es-CO')
     return newdateFormat
 }
