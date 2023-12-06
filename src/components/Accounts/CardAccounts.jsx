@@ -1,14 +1,16 @@
 'use client'
 import { PencilIcon } from "@heroicons/react/outline"
 import { GetIcons } from "../GetIcons";
+import { FormatMoney } from "@/app/lib/utils";
 
 
 export function CardAccounts(props){
 
-    const valueFormatter = (number) => `$ ${new Intl.NumberFormat('ES', { style: 'currency', currency: 'COP' }).format(number)}`;
+   
     const deleteAccount =() =>{
         console.log("Editar")
     }
+    
     return(
         <div className={`flex bg-${props.color}-500 relative rounded-lg`}>
             <span 
@@ -33,7 +35,7 @@ export function CardAccounts(props){
                     </div>
                     <div className="w-full flex items-start flex-col">
                         <span className="text-gray-300 text-sm font-semibold mt-1">{props.name}</span>                     
-                        <p className="text-white font-semibold mb-1">{valueFormatter(props.balance)}</p>             
+                        <p className="text-white font-semibold mb-1">{FormatMoney(props.balance)}</p>             
                     </div>
             </label>
         </div>
