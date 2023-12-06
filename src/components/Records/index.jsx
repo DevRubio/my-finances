@@ -5,8 +5,7 @@ export async function Records(){
     const Records = await getRecords() 
     //console.log("first ", Records)   
     return(
-        <div>
-            <h3>Registros</h3>
+        <div>            
             {Records.map((item)=>(
                 <CardRecords
                     key={item.id}
