@@ -11,6 +11,7 @@ export async function Records(){
                     key={item.id}
                     name={item.name}
                     amount={item.amount}
+                    addition={item.addition}
                     date={item.investmentDate}
                     taxe={item.taxe}
                     earningsDate={item.earningsDate}
