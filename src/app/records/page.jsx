@@ -8,7 +8,7 @@ export default function Page(){
                 <Title className="m-3">Registros</Title>
                 <Button className="w-full">+ Agregar</Button>
             </div>
-            <div className="w-[80%] ml-5">
+            <div className="w-[80%] ml-4">
                 <Records/>
             </div>
             
