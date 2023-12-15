@@ -1,12 +1,12 @@
 import { Button, Card, Icon, Title } from "@tremor/react"
 import { GetIcons } from "@/components/GetIcons";
-import { getData } from "./actionsServer";
+import { getAccounts } from "../lib/actions";
 import Link from "next/link";
 
 
 export default async function Accounts(){
 
-  const Accounts = await getData()
+  const Accounts = await getAccounts()
   
     return(
         <div className="flex">

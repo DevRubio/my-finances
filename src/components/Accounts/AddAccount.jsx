@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button, Modal, Checkbox, Label, Tooltip} from "flowbite-react";
 import { Flex, Select, SelectItem, Text, Title, TextInput} from "@tremor/react";
 import { CreditCardIcon, CashIcon, CurrencyDollarIcon, OfficeBuildingIcon } from "@heroicons/react/outline";
-import { saveData } from "@/app/accounts/actionsServer";
+import { saveData } from "@/app/lib/actions";
 
 
 export function AddAccount({Colors}){

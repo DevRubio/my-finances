@@ -2,7 +2,7 @@
 import { Button, Modal } from "flowbite-react"
 import { useState } from "react"
 import { FireIcon, XCircleIcon } from "@heroicons/react/outline"
-import { deleteAcount } from "@/app/accounts/actionsServer"
+import { deleteAccount } from "@/app/lib/actions"
 
 
 export function DeleteModal(props){
@@ -25,7 +25,7 @@ export function DeleteModal(props){
             ¿Realmente desea eliminar la cuenta ? La cuenta se eliminará de sus presupuestos. Todas las transacciones, órdenes y deudas de esta cuenta se perderán de forma definitiva.
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={()=>deleteAcount(id)}>
+              <Button color="failure" onClick={()=>deleteAccount(id)}>
                 Si, Estoy Seguro
               </Button>
               <Button color="gray" onClick={() => action.setOpenModal(undefined)}>

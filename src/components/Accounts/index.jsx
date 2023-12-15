@@ -1,11 +1,11 @@
 import { Grid } from "@tremor/react"
 import { CardAccounts } from "./CardAccounts"
 import { AddAccount } from "./AddAccount"
-import { getData, getColors } from "@/app/accounts/actionsServer"
+import { getAccounts, getColors } from "@/app/lib/actions"
 
 export async function Accounts(){ 
 
-    const Accounts = await getData()
+    const Accounts = await getAccounts()
     const Colors = await getColors()
     
     return(
