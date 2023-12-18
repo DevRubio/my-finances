@@ -64,3 +64,18 @@ export async function getRecords(){
         })
     })
 }
+
+export async function getDetailsAccount(id){   
+    try {
+        const docRef = doc(db,'accounts',id)
+        const snapshot = await getDoc(docRef)
+        if (!snapshot.exists) {         
+          return null;
+        }
+        const data = snapshot.data()      
+        return data;
+      } catch (error) {        
+        console.error(error);
+        return null;
+      }
+}
