@@ -14,11 +14,16 @@ export function FormatDate(date){
 }
 
 export function CalculateMonths(fechaInicio, fechaFin) {
-    const inicio = new Date(fechaInicio * 1000)
-    const fin = new Date(fechaFin * 1000)
 
-    const añosDiferencia = fin.getFullYear() - inicio.getFullYear()
-    const mesesDiferencia = (fin.getMonth() + 1) - (inicio.getMonth() + 1)
-
-    return (añosDiferencia * 12) + mesesDiferencia;
+    if(fechaInicio && fechaFin){
+        const inicio = new Date(fechaInicio * 1000)
+        const fin = new Date(fechaFin * 1000)    
+        const añosDiferencia = fin.getFullYear() - inicio.getFullYear()
+        const mesesDiferencia = (fin.getMonth() + 1) - (inicio.getMonth() + 1)
+    
+        return (añosDiferencia * 12) + mesesDiferencia;
+        
+    }else{
+        return 0
+    }
 }
