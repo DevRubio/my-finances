@@ -40,12 +40,12 @@ export async function saveData(value){
     }
 }
 
-export async function deleteAccount(id){
+export async function deleteDocuments(type, id){   
     try{
-        await deleteDoc(doc(db,'accounts',id))
-        redirect('/accounts')
+        await deleteDoc(doc(db, type, id))
+        //redirect('/accounts')
     }catch(error){
-        console.log("Error ")
+        console.log("Error al eliminar el Documento ", error)
     }    
 }
 
