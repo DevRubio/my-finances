@@ -1,6 +1,6 @@
 import { CardRecords } from "./CardRecords"
 import { getRecords } from "@/app/lib/actions"
-import { FormatDate, CalculateMonths } from "../../app/lib/utils"
+import { FormatDate, CalculateMonths, FormatMoney } from "../../app/lib/utils"
 
 export async function Records(){
     const Records = await getRecords() 
@@ -12,13 +12,13 @@ export async function Records(){
                     key={item.id}
                     id={item.id}
                     name={item.name}
-                    amount={item.amount}
-                    addition={item.addition}
+                    amount={FormatMoney(item.amount)}
+                    addition={FormatMoney(item.addition)}
                     date={FormatDate(item.investmentDate)}
                     months={CalculateMonths(item.investmentDate, item.earningsDate)}
                     taxe={item.taxe}
                     earningsDate={item.earningsDate}
-                    investmentEarnings={item.investmentEarnings}
+                    investmentEarnings={FormatMoney(item.investmentEarnings)}
                 />
             ))}
             
