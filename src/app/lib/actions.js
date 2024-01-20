@@ -1,6 +1,6 @@
 'use server'
 
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, where } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, where } from "firebase/firestore"
 import { firebaseApp } from "../firebase"
 import { redirect } from "next/navigation"
 
@@ -51,7 +51,7 @@ export async function deleteDocuments(type, id){
 
 export async function getRecords(){
     return new Promise((resolve, reject)=>{
-        const q = query(collection (db, 'records'))
+        const q = query(collection (db, 'records'), orderBy("earningsDate","desc"))
         const unsubscribe = onSnapshot(q, (querySnapshot)=>{
             const records =[]
             querySnapshot.forEach((doc)=>{
