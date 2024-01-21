@@ -1,7 +1,7 @@
 'use client'
-import { Divider, Flex, Icon, Subtitle, Tab, TabGroup, TabList, TabPanel, TabPanels, Title } from "@tremor/react"
+import { Divider, Flex, Icon, Subtitle, Title } from "@tremor/react"
 import { Button, Card } from "flowbite-react"
-import { ArrowLeftIcon, CashIcon, PencilIcon } from "@heroicons/react/outline"
+import { ArrowLeftIcon, PencilIcon } from "@heroicons/react/outline"
 import { DeleteModal } from "@/components/Accounts/DeleteModal"
 import { GetIcons } from "../GetIcons"
 import Link from "next/link"
@@ -40,24 +40,7 @@ export function DetailsAccount(props){
                     </div> 
                 </Flex>
                 <Divider/>
-            </Card> 
-
-            <Card className="w-full">
-            <TabGroup>
-                    <TabList>
-                        <Tab>Saldo</Tab>
-                        <Tab>Registros</Tab>
-                    </TabList>          
-                <TabPanels>
-                    <TabPanel>
-                        A
-                    </TabPanel>
-                    <TabPanel>
-                        B
-                    </TabPanel>
-                </TabPanels>
-            </TabGroup>
-            </Card>           
+            </Card>         
         </Flex>
     )
 }
