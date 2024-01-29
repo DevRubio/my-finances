@@ -1,3 +1,4 @@
+import { Italic } from "@tremor/react"
 
 export function FormatMoney(value){    
     if(value == undefined){
@@ -26,4 +27,8 @@ export function CalculateMonths(fechaInicio, fechaFin) {
     }else{
         return 0
     }
+}
+
+export const spamErrorForm =(err)=>{
+    return <Italic className="text-red-600" >{err}</Italic>
 }
