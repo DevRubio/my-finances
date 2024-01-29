@@ -1,15 +1,41 @@
 'use client'
-import { Flex, Grid, NumberInput, Select, SelectItem, Text, TextInput, Title } from "@tremor/react";
-import { Button, Modal } from "flowbite-react";
+import { Flex, Grid, NumberInput, Select, SelectItem, Text, TextInput, Title, Italic } from "@tremor/react";
+import { Button, Modal, Datepicker } from "flowbite-react";
 import { useState } from "react";
-import { BookOpenIcon, CalendarIcon, CurrencyDollarIcon, OfficeBuildingIcon } from "@heroicons/react/outline";
-import { Datepicker } from "flowbite-react";
-import { FormatMoney } from "@/app/lib/utils";
+import { BookOpenIcon, CurrencyDollarIcon, OfficeBuildingIcon } from "@heroicons/react/outline";
+import { useForm, Controller } from "react-hook-form";
+import { saveData } from "@/app/lib/actions";
+
 
 
 export function AddRecords(){
+    
     const [openModal, setOpenModal] = useState("")
     const props = { openModal, setOpenModal}
+    const {register, formState:{errors}, handleSubmit, control, reset} = useForm()
+
+    const onSubmit = (data)=>{
+        const newData = {
+            account: data.account,
+            name: data.name,
+            investmentDate: new Date(data.investmentDate),
+            earningsDate: new Date(data.earningsDate),            
+            amount : parseInt(data.amount),
+            addition : parseInt(data.addition),
+        }       
+        saveData('CDTS', newData)
+        reset()
+        setOpenModal(undefined)
+    }
+
+    const onCloseModal = ()=>{
+        setOpenModal(undefined)
+        reset()
+    }
+
+    const spamErros = (err)=>{
+        return <Italic className="text-red-600" >{err}</Italic>
+    }
 
     return(
         <div>
@@ -24,7 +50,7 @@ export function AddRecords(){
             show={props.openModal === "form-elements"}
             size="lg"
             popup
-            onClose={() => props.setOpenModal(undefined)}
+            onClose={()=>onCloseModal()}
             >
                 <Modal.Header>
                     <div className="m-2">
@@ -33,46 +59,87 @@ export function AddRecords(){
                 </Modal.Header>
 
                 <Modal.Body>
-                    <form>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <div>
                             <Grid className="gap-2" numItems={1} numItemsLg={2}>
                                 <div>
-                                    <Text>Cuenta</Text>
-                                    <Select name="account" icon={OfficeBuildingIcon}>
-                                         <SelectItem>Tyba</SelectItem>
-                                    </Select>
+                                    <Text>Cuenta</Text>                                  
+                                    <Controller
+                                    name="account"
+                                    control={control}
+                                    rules={{ required: true }}
+                                    render={({ field }) => (
+                                        <Select
+                                        value={field.value}
+                                        onChange={(value) => field.onChange(value)}
+                                        icon={OfficeBuildingIcon}
+                                        >
+                                        <SelectItem value="Tyba" icon={OfficeBuildingIcon}>
+                                            Tyba
+                                        </SelectItem>
+                                        </Select>    
+                                    )}                                    
+                                    />   
+                                    {errors.account?.type === "required" && spamErros('La cuenta es requerida')}                                
+
                                 </div>                          
                                 <div>
-                                    <Text>Nota</Text>
-                                    <TextInput placeholder="" icon={BookOpenIcon}/>
+                                    <Text>Name</Text>
+                                    <TextInput placeholder="" icon={BookOpenIcon} {...register('name',{
+                                        required: true
+                                    })} />
+                                    {errors.name?.type === "required" && spamErros('El nombre es requerido')}
                                 </div> 
                                 <div>
-                                <Text>Fecha</Text>
-                                <Datepicker/>
-                              </div>  
-                            <div>
-                                <Text>Meses</Text>
-                                <NumberInput placeholder="0 Meses" icon={CalendarIcon}/>                            
+                                    <Text>Fecha Inversion</Text>
+                                    <Controller name="investmentDate"
+                                        control={control}
+                                        rules={{ required: true }}
+                                        render=
+                                        {({ field }) => (
+                                        <Datepicker
+                                        value={field.value}
+                                        onSelectedDateChanged={(date) => field.onChange(date.toLocaleDateString('es-CO'))}   
+                                        maxDate={new Date()} 
+                                        language="es-CO"                                   
+                                        />
+                                        )}
+                                    />  
+                                    {errors.investmentDate?.type === "required" && spamErros('La fecha de inversion es requerida')}
+                                </div>  
+                            <div>                                
+                                <Text>Fecha Ganacias</Text>
+                                    <Controller name="earningsDate"
+                                        control={control}
+                                        rules={{ required: true }}
+                                        render=
+                                        {({ field }) => (
+                                        <Datepicker
+                                        value={field.value}
+                                        onSelectedDateChanged={(date) => field.onChange(date.toLocaleDateString('es-CO'))}   
+                                        maxDate={new Date()} 
+                                        dateFormat="dd-mm-yyyy"                                    
+                                        />
+                                        )}
+                                    />  
+                                    {errors.earningsDate?.type === "required" && spamErros('La fecha de ganacia es requerida')}                            
                             </div>   
                             <div>
                                 <Text>Inversion</Text>
-                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon}/>
+                                <NumberInput type="number" placeholder="00.0" icon={CurrencyDollarIcon} {...register('amount')}/>
                                 </div>
                                 <div>
                                 <Text>Addiccion</Text>
-                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon}/>
+                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('addition')}/>
                                 </div>                          
                             </Grid>                           
                         </div>
+                        <Flex className="m-4 items-center justify-center gap-2">
+                            <Button pill gradientDuoTone="greenToBlue" type="submit">Guardar</Button>
+                            <Button pill gradientDuoTone="pinkToOrange" onClick={()=>onCloseModal()}>Cancelar</Button>
+                        </Flex>
                     </form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Flex className="items-center justify-center gap-2">
-                         <Button pill gradientDuoTone="greenToBlue">Guardar</Button>
-                         <Button pill gradientDuoTone="pinkToOrange">Cancelar</Button>
-                    </Flex>                    
-                </Modal.Footer>
-                
+                </Modal.Body>                
             </Modal>              
         </div>
     )
