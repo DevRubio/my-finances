@@ -1,6 +1,6 @@
 'use server'
 
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, where } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, where, firebase } from "firebase/firestore"
 import { firebaseApp } from "../firebase"
 import { redirect } from "next/navigation"
 
@@ -21,8 +21,8 @@ export async function getAccounts(){
     })
 }
 
-export async function getColors(){
-    const querySnapshot = await getDocs(collection(db,'app_config/ewwoHea9UOUwnscABJzq/colors'))
+export async function getConfig(type){
+    const querySnapshot = await getDocs(collection(db,`app_config/ewwoHea9UOUwnscABJzq/${type}`))
     const colors = []
     querySnapshot.forEach((doc)=>{
         colors.push({...doc.data(), id: doc.id})
@@ -30,9 +30,9 @@ export async function getColors(){
     return colors
 }
 
-export async function saveData(value){
+export async function saveData(type, value){
     try{
-        await addDoc(collection(db,'accounts'),{
+        await addDoc(collection(db, type),{
             ...value
         })
     }catch(error){
