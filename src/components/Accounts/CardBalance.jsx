@@ -1,11 +1,11 @@
 import { BadgeDelta, Card,  Flex,  Metric,  Tab, TabGroup, TabList, TabPanel, TabPanels, Text } from "@tremor/react"
 import { Records } from "@/components/Records"
-import { getRecords } from "@/app/lib/actions"
+import { getRecordsForAccounts } from "@/app/lib/actions"
 import { FormatMoney } from "@/app/lib/utils"
 
 export async function CardBalance(props){
 
-    const data = await getRecords()
+    const data = await getRecordsForAccounts(props.id)
     let total = 0
     let Earnings = 0
 
