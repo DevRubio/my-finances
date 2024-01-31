@@ -17,6 +17,7 @@ export default async function Detail({params}){
             color={account.color}
           />
         <CardBalance
+            id={id}
             color={account.color}
         />
         </div>   
