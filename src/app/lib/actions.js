@@ -3,6 +3,7 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, where, firebase } from "firebase/firestore"
 import { firebaseApp } from "../firebase"
 import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache"
 
 const db = getFirestore(firebaseApp)
 
@@ -30,11 +31,22 @@ export async function getConfig(type){
     return colors
 }
 
-export async function saveData(type, value){
-    try{
-        await addDoc(collection(db, type),{
-            ...value
-        })
+export async function saveData(type, value, idAccount){
+    try{  
+        if(type != 'accounts'){
+            const accountsCollectionRef = collection(db, 'accounts');
+            const accountDocRef = doc(accountsCollectionRef, idAccount);
+            await addDoc(collection(db, type),{
+                ...value,            
+                account: accountDocRef
+            })
+        }else{
+            await addDoc(collection(db, type),{
+                ...value
+            })
+        }    
+       
+        revalidatePath('../page.js')
     }catch(error){
         console.log("Error al guardar los datos", error)
     }
@@ -42,11 +54,11 @@ export async function saveData(type, value){
 
 export async function deleteDocuments(type, id){   
     try{
-        await deleteDoc(doc(db, type, id))
-        //redirect('/accounts')
+        await deleteDoc(doc(db, type, id))        
     }catch(error){
         console.log("Error al eliminar el Documento ", error)
-    }    
+    }
+    redirect('/accounts')    
 }
 
 export async function getRecords(){
@@ -79,3 +91,24 @@ export async function getDetailsAccount(id){
         return null;
       }
 }
+
+export async function getRecordsForAccounts(accountId){
+    return new Promise((resolve, reject)=>{
+        const accountsCollectionRef = collection(db, 'accounts');
+        const accountDocRef = doc(accountsCollectionRef, accountId);
+
+        const q = query(collection(db, "CDTS"), where("account", "==", accountDocRef));
+
+        const unsub = onSnapshot(q, (querSnapshot)=>{
+         const AmountAcounts = []
+         querSnapshot.forEach((doc)=>{
+             AmountAcounts.push({...doc.data(), id: doc.id})
+         })
+         resolve(AmountAcounts)
+        },(error)=>{
+            reject(error)
+        })
+    })
+  }
+
+
