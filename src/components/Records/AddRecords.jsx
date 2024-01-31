@@ -73,7 +73,7 @@ export function AddRecords({Accounts}){
                                         icon={OfficeBuildingIcon}
                                         >
                                             {Accounts.map((item)=>(
-                                                <SelectItem value={item.id} icon={OfficeBuildingIcon}>
+                                                <SelectItem key={item.id} value={item.id} icon={OfficeBuildingIcon}>
                                                 {item.name}
                                             </SelectItem>
                                             ))}
