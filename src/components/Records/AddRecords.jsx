@@ -5,14 +5,13 @@ import { useState } from "react";
 import { BookOpenIcon, CurrencyDollarIcon, OfficeBuildingIcon } from "@heroicons/react/outline";
 import { useForm, Controller } from "react-hook-form";
 import { saveData } from "@/app/lib/actions";
+import { spamErrorForm } from "@/app/lib/utils";
 
+export function AddRecords({Accounts}){ 
 
-
-export function AddRecords(){
-    
     const [openModal, setOpenModal] = useState("")
-    const props = { openModal, setOpenModal}
-    const {register, formState:{errors}, handleSubmit, control, reset} = useForm()
+    const propsModal = { openModal, setOpenModal}
+    const {register, formState:{errors}, handleSubmit, control, reset} = useForm()    
 
     const onSubmit = (data)=>{
         const newData = {
@@ -20,10 +19,12 @@ export function AddRecords(){
             name: data.name,
             investmentDate: new Date(data.investmentDate),
             earningsDate: new Date(data.earningsDate),            
-            amount : parseInt(data.amount),
+            reinvestment : parseInt(data.reinvestment),
             addition : parseInt(data.addition),
-        }       
-        saveData('CDTS', newData)
+            investmentEarnings: parseInt(data.investmentEarnings)
+        }
+        const idAccount = data.account   
+        saveData('CDTS', newData, idAccount)
         reset()
         setOpenModal(undefined)
     }
@@ -33,21 +34,18 @@ export function AddRecords(){
         reset()
     }
 
-    const spamErros = (err)=>{
-        return <Italic className="text-red-600" >{err}</Italic>
-    }
-
     return(
         <div>
+            
             <div
-            onClick={()=>props.setOpenModal("form-elements")}
+            onClick={()=>propsModal.setOpenModal("form-elements")}
             className="flex justify-center items-center w-full p-2 text-white gap-1"
             >
             <div>+</div>
             <div>Agregar</div>  
             </div>
             <Modal
-            show={props.openModal === "form-elements"}
+            show={propsModal.openModal === "form-elements"}
             size="lg"
             popup
             onClose={()=>onCloseModal()}
@@ -74,13 +72,16 @@ export function AddRecords(){
                                         onChange={(value) => field.onChange(value)}
                                         icon={OfficeBuildingIcon}
                                         >
-                                        <SelectItem value="Tyba" icon={OfficeBuildingIcon}>
-                                            Tyba
-                                        </SelectItem>
+                                            {Accounts.map((item)=>(
+                                                <SelectItem value={item.id} icon={OfficeBuildingIcon}>
+                                                {item.name}
+                                            </SelectItem>
+                                            ))}
+                                        
                                         </Select>    
                                     )}                                    
                                     />   
-                                    {errors.account?.type === "required" && spamErros('La cuenta es requerida')}                                
+                                    {errors.account?.type === "required" && spamErrorForm('La cuenta es requerida')}                                
 
                                 </div>                          
                                 <div>
@@ -88,7 +89,7 @@ export function AddRecords(){
                                     <TextInput placeholder="" icon={BookOpenIcon} {...register('name',{
                                         required: true
                                     })} />
-                                    {errors.name?.type === "required" && spamErros('El nombre es requerido')}
+                                    {errors.name?.type === "required" && spamErrorForm('El nombre es requerido')}
                                 </div> 
                                 <div>
                                     <Text>Fecha Inversion</Text>
@@ -105,7 +106,7 @@ export function AddRecords(){
                                         />
                                         )}
                                     />  
-                                    {errors.investmentDate?.type === "required" && spamErros('La fecha de inversion es requerida')}
+                                    {errors.investmentDate?.type === "required" && spamErrorForm('La fecha de inversion es requerida')}
                                 </div>  
                             <div>                                
                                 <Text>Fecha Ganacias</Text>
@@ -117,21 +118,24 @@ export function AddRecords(){
                                         <Datepicker
                                         value={field.value}
                                         onSelectedDateChanged={(date) => field.onChange(date.toLocaleDateString('es-CO'))}   
-                                        maxDate={new Date()} 
-                                        dateFormat="dd-mm-yyyy"                                    
+                                        maxDate={new Date()}                                 
                                         />
                                         )}
                                     />  
-                                    {errors.earningsDate?.type === "required" && spamErros('La fecha de ganacia es requerida')}                            
+                                    {errors.earningsDate?.type === "required" && spamErrorForm('La fecha de ganacia es requerida')}                            
                             </div>   
                             <div>
-                                <Text>Inversion</Text>
-                                <NumberInput type="number" placeholder="00.0" icon={CurrencyDollarIcon} {...register('amount')}/>
+                                <Text>Reinversión</Text>
+                                <NumberInput type="number" placeholder="00.0" icon={CurrencyDollarIcon} {...register('reinvestment')}/>
                                 </div>
                                 <div>
-                                <Text>Addiccion</Text>
+                                <Text>Capital inicial o addiccion</Text>
                                 <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('addition')}/>
-                                </div>                          
+                                </div>    
+                                <div>
+                                <Text>Ganancias</Text>
+                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('investmentEarnings')}/>
+                                </div>                           
                             </Grid>                           
                         </div>
                         <Flex className="m-4 items-center justify-center gap-2">
