@@ -97,7 +97,7 @@ export async function getRecordsForAccounts(accountId){
         const accountsCollectionRef = collection(db, 'accounts');
         const accountDocRef = doc(accountsCollectionRef, accountId);
 
-        const q = query(collection(db, "CDTS"), where("account", "==", accountDocRef));
+        const q = query(collection(db, "CDTS"), where("account", "==", accountDocRef), orderBy('earningsDate','desc'));
 
         const unsub = onSnapshot(q, (querSnapshot)=>{
          const AmountAcounts = []
