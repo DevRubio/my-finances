@@ -5,7 +5,7 @@ import { useState } from "react";
 import { BookOpenIcon, CurrencyDollarIcon, OfficeBuildingIcon } from "@heroicons/react/outline";
 import { useForm, Controller } from "react-hook-form";
 import { saveData } from "@/app/lib/actions";
-import { spamErrorForm } from "@/app/lib/utils";
+import { spamErrorForm, StringToDate } from "@/app/lib/utils";
 
 export function AddRecords({Accounts}){ 
 
@@ -17,13 +17,13 @@ export function AddRecords({Accounts}){
         const newData = {
             account: data.account,
             name: data.name,
-            investmentDate: new Date(data.investmentDate),
-            earningsDate: new Date(data.earningsDate),            
+            investmentDate: StringToDate(data.investmentDate),
+            earningsDate: StringToDate(data.earningsDate),            
             reinvestment : parseInt(data.reinvestment),
             addition : parseInt(data.addition),
             investmentEarnings: parseInt(data.investmentEarnings)
         }
-        const idAccount = data.account   
+        const idAccount = data.account  
         saveData('CDTS', newData, idAccount)
         reset()
         setOpenModal(undefined)
@@ -46,7 +46,7 @@ export function AddRecords({Accounts}){
             </div>
             <Modal
             show={propsModal.openModal === "form-elements"}
-            size="lg"
+            size="2xl"
             popup
             onClose={()=>onCloseModal()}
             >
@@ -99,10 +99,10 @@ export function AddRecords({Accounts}){
                                         render=
                                         {({ field }) => (
                                         <Datepicker
-                                        value={field.value}
+                                        value={field.value}                                        
+                                        language="es-CO"
                                         onSelectedDateChanged={(date) => field.onChange(date.toLocaleDateString('es-CO'))}   
-                                        maxDate={new Date()} 
-                                        language="es-CO"                                   
+                                        maxDate={new Date()}                                
                                         />
                                         )}
                                     />  
@@ -117,6 +117,7 @@ export function AddRecords({Accounts}){
                                         {({ field }) => (
                                         <Datepicker
                                         value={field.value}
+                                        language="es-CO"
                                         onSelectedDateChanged={(date) => field.onChange(date.toLocaleDateString('es-CO'))}   
                                         maxDate={new Date()}                                 
                                         />
@@ -126,15 +127,24 @@ export function AddRecords({Accounts}){
                             </div>   
                             <div>
                                 <Text>Reinversión</Text>
-                                <NumberInput type="number" placeholder="00.0" icon={CurrencyDollarIcon} {...register('reinvestment')}/>
+                                <NumberInput type="number" placeholder="00.0" icon={CurrencyDollarIcon} {...register('reinvestment',{
+                                    required: true
+                                })}/>
+                                {errors.reinvestment?.type === 'required' && spamErrorForm('El valor de la reinversión es requerido')}
                                 </div>
                                 <div>
                                 <Text>Capital inicial o addiccion</Text>
-                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('addition')}/>
+                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('addition',{
+                                    required: true
+                                })}/>
+                                {errors.addition?.type === 'required' && spamErrorForm('El valor de la adicción es requerido')}
                                 </div>    
                                 <div>
                                 <Text>Ganancias</Text>
-                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('investmentEarnings')}/>
+                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('investmentEarnings',{
+                                    required: true
+                                })}/>
+                                {errors.investmentEarnings?.type === 'required' && spamErrorForm('El valor de las ganancias es requerido')}
                                 </div>                           
                             </Grid>                           
                         </div>
