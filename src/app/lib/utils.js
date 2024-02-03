@@ -32,3 +32,21 @@ export function CalculateMonths(fechaInicio, fechaFin) {
 export const spamErrorForm =(err)=>{
     return <Italic className="text-red-600" >{err}</Italic>
 }
+
+export const CalTaxe = (Earnings, total) =>{
+    if(Earnings != 0){
+        return ((Earnings/total)*100/1).toFixed(2)
+    }
+    return 0
+}
+
+export const StringToDate=(date)=>{
+    const partsDate = date.split('/')
+    const day = parseInt(partsDate[0], 10)
+    const mount = parseInt(partsDate[1], 10)-1
+    const year = parseInt(partsDate[2],10)
+
+    const newDate = new Date(year, mount, day)
+
+    return newDate
+}
