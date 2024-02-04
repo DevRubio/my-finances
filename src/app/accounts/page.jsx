@@ -1,6 +1,7 @@
 import { Button, Card, Icon, Title } from "@tremor/react"
 import { GetIcons } from "@/components/GetIcons";
 import { getAccounts } from "../lib/actions";
+import { FormatMoney } from "../lib/utils";
 import Link from "next/link";
 
 
@@ -29,7 +30,7 @@ export default async function Accounts(){
                             />
                         <span>{item.name}</span>
                         <span>{item.type}</span>
-                        <span>{item.amount}</span>
+                        <span>{FormatMoney(item.amount)}</span>
                         </div>                        
                         </Link>
 
