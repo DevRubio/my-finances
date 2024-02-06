@@ -1,6 +1,6 @@
 'use server'
 
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, where, firebase } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, where, firebase, updateDoc } from "firebase/firestore"
 import { firebaseApp } from "../firebase"
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
@@ -111,4 +111,28 @@ export async function getRecordsForAccounts(accountId){
     })
   }
 
+  export async function getAmountByAccount(accountId){
+        return new Promise((resolve, reject)=>{
+            const accountCollectionRef = collection(db, 'accounts')
+            const accountDocRef = doc(accountCollectionRef, accountId)
+            const q = query(collection(db, 'CDTS'), where('account', '==', accountDocRef))
+            const unsub = onSnapshot(q, (querSnapshot)=>{
+            let total = 0
+            querSnapshot.forEach((doc)=>{
+            total += doc.data().investmentEarnings
+            total += doc.data().addition
+                })
+                updateAmountAccount(accountId, total)
+            resolve(total)
+        },(error)=>{
+        reject(error)
+        })
+    })
+    }
 
+export async function updateAmountAccount(id, amount){    
+        const account = doc(db,"accounts",id)        
+        await updateDoc(account,{
+            amount: amount
+        })
+}
