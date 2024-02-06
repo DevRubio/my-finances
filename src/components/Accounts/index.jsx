@@ -14,6 +14,7 @@ export async function Accounts(){
                 {Accounts.map((item) =>(
                     <CardAccounts
                         key={item.id}
+                        id={item.id}
                         color={item.color}
                         icon={item.icon}
                         name={item.name}
