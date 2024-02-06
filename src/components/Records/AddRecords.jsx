@@ -4,7 +4,7 @@ import { Button, Modal, Datepicker } from "flowbite-react";
 import { useState } from "react";
 import { BookOpenIcon, CurrencyDollarIcon, OfficeBuildingIcon } from "@heroicons/react/outline";
 import { useForm, Controller } from "react-hook-form";
-import { saveData } from "@/app/lib/actions";
+import { saveData, getAmountByAccount } from "@/app/lib/actions";
 import { spamErrorForm, StringToDate } from "@/app/lib/utils";
 
 export function AddRecords({Accounts}){ 
@@ -27,6 +27,7 @@ export function AddRecords({Accounts}){
         saveData('CDTS', newData, idAccount)
         reset()
         setOpenModal(undefined)
+        getAmountByAccount(idAccount)
     }
 
     const onCloseModal = ()=>{
