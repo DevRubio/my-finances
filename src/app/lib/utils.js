@@ -50,3 +50,13 @@ export const StringToDate=(date)=>{
 
     return newDate
 }
+
+export const calcDeltaType=(taxe)=>{
+    if(taxe > 1){
+        return "moderateIncrease"
+      }else if(taxe < -1){
+        return "moderateDecrease"
+      }else{
+        return "unchanged"
+      }
+  }
