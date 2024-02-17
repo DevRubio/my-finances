@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache"
 
 const db = getFirestore(firebaseApp)
 
+const criptoRef = collection(db,'CRIPTO')
+
 export async function getAccounts(){
     return new Promise((resolve, reject)=>{
         const q = query(collection(db,'accounts'))
@@ -31,6 +33,19 @@ export async function getConfig(type){
     return colors
 }
 
+export async function getRecordsById(refCollection , id){
+    const docRef = doc(db, refCollection, id);
+    const docSnap = await getDoc(docRef);
+    const user =  docSnap.data()
+    if (docSnap.exists()) {
+        return user  
+    } else {
+    // docSnap.data() will be undefined in this case
+    console.log("No such document!");
+    }
+    
+  }
+
 export async function saveData(type, value, idAccount){
     try{  
         if(type != 'accounts'){
@@ -52,18 +67,26 @@ export async function saveData(type, value, idAccount){
     }
 }
 
+export async function updateData(refCollection, id, data){  
+    const docRef = doc(collection(db, refCollection),id)
+    updateDoc(docRef,{
+        ...data
+      })
+      revalidatePath('../page.js') 
+}
+
 export async function deleteDocuments(type, id){   
     try{
         await deleteDoc(doc(db, type, id))        
     }catch(error){
         console.log("Error al eliminar el Documento ", error)
     }
-    redirect('/accounts')    
+    revalidatePath('../page.js')  
 }
 
-export async function getRecords(){
+export async function getRecords(refcollection){
     return new Promise((resolve, reject)=>{
-        const q = query(collection (db, 'records'), orderBy("earningsDate","desc"))
+        const q = query(collection (db, refcollection), orderBy("investmentDate","desc"))
         const unsubscribe = onSnapshot(q, (querySnapshot)=>{
             const records =[]
             querySnapshot.forEach((doc)=>{
@@ -115,7 +138,7 @@ export async function getRecordsForAccounts(accountId){
         return new Promise((resolve, reject)=>{
             const accountCollectionRef = collection(db, 'accounts')
             const accountDocRef = doc(accountCollectionRef, accountId)
-            const q = query(collection(db, 'CDTS'), where('account', '==', accountDocRef))
+            const q = query(collection(db, 'CDTS'), where('account', '==', accountDocRef)) 
             const unsub = onSnapshot(q, (querSnapshot)=>{
             let total = 0
             querSnapshot.forEach((doc)=>{
