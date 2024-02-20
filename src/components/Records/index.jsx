@@ -1,27 +1,42 @@
-import { CardRecords } from "./CardRecords"
-import { getRecords } from "@/app/lib/actions"
-import { FormatDate, CalculateMonths, FormatMoney } from "../../app/lib/utils"
+import { AccordionBody, AccordionHeader, AccordionList, Accordion } from "@tremor/react"
+import { getRecords, getConfig } from "@/app/lib/actions"
+import { TableRecordsCripto } from "./TableRecordsCripto"
+import { TableRecordsCDTS } from "./TableRecordsCDTS"
+import { TableRecordsFICS } from "./TableRecordsFICS"
 
 export async function Records(){
-    const Records = await getRecords() 
-    //console.log("first ", Records)   
+    const recordsCripto = await getRecords('CRIPTO')
+    const price = await getConfig('priceCripto')  
+    const recordsCDTS = await getRecords('CDTS')
+    const recordsFIC = await getRecords('FICS')
+
     return(
-        <div>            
-            {Records.map((item)=>(
-                <CardRecords
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    amount={FormatMoney(item.amount)}
-                    addition={FormatMoney(item.addition)}
-                    date={FormatDate(item.investmentDate)}
-                    months={CalculateMonths(item.investmentDate, item.earningsDate)}
-                    taxe={item.taxe}
-                    earningsDate={item.earningsDate}
-                    investmentEarnings={FormatMoney(item.investmentEarnings)}
+        <AccordionList className="mx-auto">
+            <Accordion>
+                <AccordionHeader>CRIPTO</AccordionHeader>
+                <AccordionBody>
+                <TableRecordsCripto 
+                recordsCripto={recordsCripto}
+                price={price}
+             />
+                </AccordionBody>
+            </Accordion>
+            <Accordion>
+                <AccordionHeader>CDTS</AccordionHeader>
+                <AccordionBody>
+                <TableRecordsCDTS
+                    recordsCDTS={recordsCDTS}
                 />
-            ))}
-            
-        </div>
+                </AccordionBody>
+            </Accordion>
+            <Accordion>
+                <AccordionHeader>FICS</AccordionHeader>
+                <AccordionBody>
+                    <TableRecordsFICS
+                        recordsFIC={recordsFIC}
+                    />
+                </AccordionBody>
+            </Accordion>
+        </AccordionList>
     )
 }
