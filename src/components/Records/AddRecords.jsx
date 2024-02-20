@@ -1,30 +1,45 @@
 'use client'
-import { Flex, Grid, NumberInput, Select, SelectItem, Text, TextInput, Title, Italic } from "@tremor/react";
-import { Button, Modal, Datepicker } from "flowbite-react";
+import { Flex, Grid, NumberInput, Select, SelectItem, Text, TextInput, Title } from "@tremor/react";
+import { Button, Modal, Datepicker, Checkbox } from "flowbite-react";
 import { useState } from "react";
-import { BookOpenIcon, CurrencyDollarIcon, OfficeBuildingIcon } from "@heroicons/react/outline";
+import { BookOpenIcon, CashIcon, CurrencyDollarIcon, OfficeBuildingIcon } from "@heroicons/react/outline";
 import { useForm, Controller } from "react-hook-form";
 import { saveData, getAmountByAccount } from "@/app/lib/actions";
 import { spamErrorForm, StringToDate } from "@/app/lib/utils";
 
-export function AddRecords({Accounts}){ 
+export function AddRecords({Accounts, typeInvestment}){ 
 
     const [openModal, setOpenModal] = useState("")
     const propsModal = { openModal, setOpenModal}
-    const {register, formState:{errors}, handleSubmit, control, reset} = useForm()    
+    
+    const {register, formState:{errors}, handleSubmit, control, reset, watch} = useForm()  
+    
+    const InvesmentType = watch('typeInvestment')
+    const Activeinvestment = watch('ActiveInvestment')   
 
     const onSubmit = (data)=>{
+        const idAccount = data.account
+        const typeInvestment = data.typeInvestment
+
         const newData = {
             account: data.account,
             name: data.name,
             investmentDate: StringToDate(data.investmentDate),
-            earningsDate: StringToDate(data.earningsDate),            
-            reinvestment : parseInt(data.reinvestment),
             addition : parseInt(data.addition),
-            investmentEarnings: parseInt(data.investmentEarnings)
+            earningsDate: StringToDate(data.earningsDate),
+            finalBalance : parseInt(data.finalBalance ? data.finalBalance : 0)
         }
-        const idAccount = data.account  
-        saveData('CDTS', newData, idAccount)
+
+        if(data.typeInvestment === 'CDTS'){
+            newData.reinvestment = parseInt(data.reinvestment ? data.reinvestment : 0)          
+        }else if(data.typeInvestment === 'FICS'){
+            
+        }else if(data.typeInvestment === 'CRIPTO'){
+            newData.amountCripto = parseFloat(data.amountCripto)
+            newData.price = parseFloat(data.price)
+            delete newData.finalBalance
+        }   
+        saveData(typeInvestment, newData, idAccount)
         reset()
         setOpenModal(undefined)
         getAmountByAccount(idAccount)
@@ -86,6 +101,27 @@ export function AddRecords({Accounts}){
 
                                 </div>                          
                                 <div>
+                                    <Text>Tipo de Inversión</Text>
+                                    <Controller
+                                        name="typeInvestment"
+                                        control={control}
+                                        rules={{require: true}}
+                                        render={({field})=>(
+                                            <Select
+                                                value={field.value}
+                                                onChange={(value) => field.onChange(value)}
+                                                icon={CashIcon}
+                                            >
+                                                {typeInvestment.map((item)=>(
+                                                    <SelectItem key={item.id} value={item.name} icon={CashIcon}>
+                                                        {item.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </Select> 
+                                        )}
+                                    />
+                                </div>
+                                <div>
                                     <Text>Name</Text>
                                     <TextInput placeholder="" icon={BookOpenIcon} {...register('name',{
                                         required: true
@@ -108,45 +144,77 @@ export function AddRecords({Accounts}){
                                         )}
                                     />  
                                     {errors.investmentDate?.type === "required" && spamErrorForm('La fecha de inversion es requerida')}
-                                </div>  
-                            <div>                                
-                                <Text>Fecha Ganacias</Text>
-                                    <Controller name="earningsDate"
-                                        control={control}
-                                        rules={{ required: true }}
-                                        render=
-                                        {({ field }) => (
-                                        <Datepicker
-                                        value={field.value}
-                                        language="es-CO"
-                                        onSelectedDateChanged={(date) => field.onChange(date.toLocaleDateString('es-CO'))}   
-                                        maxDate={new Date()}                                 
-                                        />
-                                        )}
-                                    />  
-                                    {errors.earningsDate?.type === "required" && spamErrorForm('La fecha de ganacia es requerida')}                            
-                            </div>   
-                            <div>
-                                <Text>Reinversión</Text>
-                                <NumberInput type="number" placeholder="00.0" icon={CurrencyDollarIcon} {...register('reinvestment',{
-                                    required: true
-                                })}/>
-                                {errors.reinvestment?.type === 'required' && spamErrorForm('El valor de la reinversión es requerido')}
                                 </div>
                                 <div>
-                                <Text>Capital inicial o addiccion</Text>
-                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('addition',{
-                                    required: true
-                                })}/>
-                                {errors.addition?.type === 'required' && spamErrorForm('El valor de la adicción es requerido')}
-                                </div>    
-                                <div>
-                                <Text>Ganancias</Text>
-                                <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('investmentEarnings',{
-                                    required: true
-                                })}/>
-                                {errors.investmentEarnings?.type === 'required' && spamErrorForm('El valor de las ganancias es requerido')}
-                                </div>                           
+                                    <Text>
+                                        {InvesmentType == 'CRIPTO' ? 'COP' :'Capital inicial o addiccion'}                                        
+                                    </Text>
+                                    <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('addition',{
+                                        required: true
+                                    })}/>
+                                    {errors.addition?.type === 'required' && spamErrorForm('El valor es requerido')}
+                                </div> 
+
+                                    {
+                                        InvesmentType === 'CRIPTO' &&(
+                                        <>
+                                        <div>
+                                            <Text>Total Criptomoneda</Text>
+                                            <TextInput placeholder="0.0000" icon={CurrencyDollarIcon} {...register('amountCripto',{
+                                                required: true
+                                            })}/>  
+                                            {errors.amountCripto?.type === 'required' && spamErrorForm('El saldo de la criptomoneda es requerido')}  
+                                        </div>
+                                        <div>
+                                            <Text>Precio de compra</Text>
+                                            <TextInput placeholder="0.00" icon={CurrencyDollarIcon}{...register('price',{
+                                                required: true
+                                            })}/>
+                                            {errors.price?.type === 'required' && spamErrorForm('El precio de compra es requerido')}
+                                        </div>
+                                        </>
+                                        )
+                                    }
+ 
+                                {
+                                    InvesmentType === 'CDTS' &&(
+                                        <div>
+                                            <Text>Reinversión</Text>
+                                            <NumberInput type="number" placeholder="00.0" icon={CurrencyDollarIcon} {...register('reinvestment')}/>                                            
+                                        </div>
+                                    )                                
+                                }
+                                <div className="flex items-center justify-center">
+                                    <Text className="p-4">¿Inversión Finalizada? </Text>
+                                    <Checkbox {...register('ActiveInvestment')} />
+                                </div>
+                                {
+                                    Activeinvestment === true &&(
+                                        <>
+                                        <div>                                
+                                        <Text>Fecha Ganancias</Text>
+                                            <Controller name="earningsDate"
+                                                control={control}
+                                                rules={{ required: true }}
+                                                render=
+                                                {({ field }) => (
+                                                <Datepicker
+                                                value={field.value}
+                                                language="es-CO"
+                                                onSelectedDateChanged={(date) => field.onChange(date.toLocaleDateString('es-CO'))}   
+                                                maxDate={new Date()}                                 
+                                                />
+                                                )}
+                                            />  
+                                            {errors.earningsDate?.type === "required" && spamErrorForm('La fecha de ganacia es requerida')}                            
+                                    </div> 
+                                    <div>
+                                        <Text>Saldo Final</Text>
+                                        <NumberInput placeholder="00.0" icon={CurrencyDollarIcon} {...register('finalBalance')} />                                
+                                    </div>  
+                                        </>                         
+                                    )
+                                }
                             </Grid>                           
                         </div>
                         <Flex className="m-4 items-center justify-center gap-2">
